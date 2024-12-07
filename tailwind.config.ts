@@ -12,6 +12,13 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        poppins: ['var(--font-poppins)', 'sans-serif'], // Poppins font
+        inter: ['var(--font-inter)', 'sans-serif'],     // Inter font
+      },
+      letterSpacing: {
+        wider: '3%' // 3% letter spacing
+      }
     },
   },
   plugins: [],
