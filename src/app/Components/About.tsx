@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import Image from 'next/image'; // Import Next.js Image component
+import Link from 'next/link';
 
 const AboutSection = () => {
   return (
@@ -10,16 +11,17 @@ const AboutSection = () => {
         {/* Left Side - Text Section */}
         <div className="md:w-1/2 mb-8 md:mb-0 px-4">
           <nav className="text-sm font-poppins text-gray-500 mb-4">
-            <a href="/" className="hover:text-black">Home</a> / <span className="text-black">About</span>
+            <Link href="/" className="hover:text-black">Home</Link> / <span className="text-black">About</span>
           </nav>
           <h1 className="text-2xl md:text-4xl font-bold mb-6">Our Story</h1>
           <p className="text-gray-600 leading-relaxed mb-4">
-            Launched in 2015, Exclusive is South Asia's premier online shopping
-            marketplace with an active presence in Bangladesh. Supported by a wide
-            range of tailored marketing, data, and service solutions, Exclusive has
-            10,500 sellers and 300 brands and serves 3 million customers across the
-            region.
-          </p>
+  Launched in 2015, Exclusive is South Asia&apos;s premier online shopping
+  marketplace with an active presence in Bangladesh. Supported by a wide
+  range of tailored marketing, data, and service solutions, Exclusive has
+  10,500 sellers and 300 brands and serves 3 million customers across the
+  region.
+</p>
+
           <p className="text-gray-600 leading-relaxed">
             Exclusive has more than 1 million products to offer, growing at a very
             fast pace. Exclusive offers a diverse assortment in categories ranging

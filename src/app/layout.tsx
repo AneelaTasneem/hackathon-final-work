@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
-import { Poppins, Inter } from "next/font/google"; // Import Poppins and Inter fonts
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/Components/Navbar"; // Import Navbar
+import Footer from "@/Components/Footer"; // Import Footer
 
 // Configure the Poppins font
 const poppins = Poppins({
-  subsets: ["latin"], // Specify the character subsets
-  weight: ["100", "300", "400", "500", "600", "700", "800", "900"], // Add required font weights
-  variable: "--font-poppins", // CSS variable for Poppins
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
 });
 
 // Configure the Inter font
 const inter = Inter({
-  subsets: ["latin"], // Specify the character subsets
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], // Add required font weights
-  variable: "--font-inter", // CSS variable for Inter
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -29,9 +31,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${inter.variable} antialiased`} // Apply both fonts
+        className={`${poppins.variable} ${inter.variable} antialiased`}
       >
-        {children}
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Page Content */}
+        <main>{children}</main>
+
+        {/* Footer */}
+        <Footer />
       </body>
     </html>
   );
