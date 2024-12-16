@@ -1,33 +1,18 @@
 import React from "react";
-import Image from "next/image";
-import { GrTrophy } from "react-icons/gr";
-import { GoVerified } from "react-icons/go";
-import { FaPeopleCarryBox } from "react-icons/fa6";
-import { MdOutlineSupportAgent } from "react-icons/md";
+import Overlay from "../Components/Overlay";
+import Iconsection from "../Components/Iconssection";
+
 
 const YourComponent = () => {
   return (
     <div className="relative min-h-screen">
       {/* Background Image Section */}
-      <div className="relative w-full h-64 sm:h-48 md:h-64">
-        <Image
-          src="/shop.jpeg"
-          alt="Background Image"
-          layout="fill"
-          objectFit="cover"
-          className="opacity-50"
-        />
-        {/* Overlay content */}
-        <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col items-center justify-center space-y-4 px-4">
-          <h1 className="text-black font-poppins font-medium text-[36px] sm:text-[28px] md:text-[48px] leading-[48px] md:leading-[72px] text-center">
-            Contact
-          </h1>
-          <p className="font-poppins text-black font-medium text-[14px] sm:text-[12px] md:text-[16px] leading-[20px] md:leading-[24px] text-center">
-            Home -{" "}
-            <span className="font-poppins font-light">Contact</span>
-          </p>
-        </div>
-      </div>
+     <Overlay 
+      heading="Contact"
+      breadcrumb="Contact"
+      imageSrc="/shop.jpeg"
+     />
+
 
       <div className="bg-[#faf3ea] py-16 px-4">
         <div className="max-w-7xl mx-auto">
@@ -144,7 +129,7 @@ const YourComponent = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-yellow-500 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-200"
+                className="w-[237px] h-[55px] bg-[#B88E2F] text-white  font-poppins font-normal py-3 rounded-md border-[1px] hover:bg-blue-700"
               >
                 Submit
               </button>
@@ -153,41 +138,14 @@ const YourComponent = () => {
         </div>
       </div>
 
-      {/* Icons Section */}
+
+
+      {/* Icon Section */}
       <div className="w-full py-16 px-4 bg-[#faf3ea]">
-        <div className="max-w-7xl mx-auto">
-          {/* Icons with Titles and Descriptions */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {/* High Quality */}
-            <div className="flex flex-col items-center">
-              <GrTrophy size={40} className="mb-4 text-gray-700" />
-              <h3 className="text-lg font-medium text-gray-800">High Quality</h3>
-              <p className="text-sm text-gray-500">Crafted from top material.</p>
-            </div>
-
-            {/* Warranty Protection */}
-            <div className="flex flex-col items-center">
-              <GoVerified size={40} className="mb-4 text-gray-700" />
-              <h3 className="text-lg font-medium text-gray-800">Warranty Protection</h3>
-              <p className="text-sm text-gray-500">Over 2 years.</p>
-            </div>
-
-            {/* Free Shipping */}
-            <div className="flex flex-col items-center">
-              <FaPeopleCarryBox size={40} className="mb-4 text-gray-700" />
-              <h3 className="text-lg font-medium text-gray-800">Free Shipping</h3>
-              <p className="text-sm text-gray-500">Order over $150</p>
-            </div>
-
-            {/* 24/7 Support */}
-            <div className="flex flex-col items-center">
-              <MdOutlineSupportAgent size={40} className="mb-4 text-gray-700" />
-              <h3 className="text-lg font-medium text-gray-800">24/7 Support</h3>
-              <p className="text-sm text-gray-500">Dedicated</p>
-            </div>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <Iconsection />
       </div>
+    </div>
     </div>
   );
 };
