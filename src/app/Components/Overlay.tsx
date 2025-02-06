@@ -1,14 +1,15 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link"; // Import the Link component
 
 // Define the type for props
-interface Overlayprops {
+interface OverlayProps {
   heading: string;
   breadcrumb: string;
   imageSrc: string;
 }
 
-const Overlay = (props: Overlayprops) => {
+const Overlay = (props: OverlayProps) => {
   const { heading, breadcrumb, imageSrc } = props;
   return (
     <div className="relative w-full h-64 sm:h-48 md:h-64">
@@ -26,7 +27,11 @@ const Overlay = (props: Overlayprops) => {
           {heading}
         </h1>
         <p className="font-poppins text-black font-medium text-[14px] sm:text-[12px] md:text-[16px] leading-[20px] md:leading-[24px] text-center">
-          Home - <span className="font-poppins font-light">{breadcrumb}</span>
+          
+          <Link href="/">
+            <span className="text-blue-500 hover:underline cursor-pointer">Home</span>
+          </Link>
+          - <span className="font-poppins font-light">{breadcrumb}</span>
         </p>
       </div>
     </div>

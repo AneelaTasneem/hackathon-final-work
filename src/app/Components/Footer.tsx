@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link"; // Import Link from Next.js
 
 const Footer = () => {
   return (
@@ -18,16 +19,24 @@ const Footer = () => {
           <h3 className="font-semibold text-gray-800 mb-2">Links</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:underline">Home</a>
+              <Link href="/" >
+                <span className="hover:underline">Home</span>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">Shop</a>
+              <Link href="/Shop" >
+                <span className="hover:underline">Shop</span>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">About</a>
+              <Link href="/About" >
+                <span className="hover:underline">About</span>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">Contact</a>
+              <Link href="/Contact" >
+                <span className="hover:underline">Contact</span>
+              </Link>
             </li>
           </ul>
         </div>
@@ -37,13 +46,19 @@ const Footer = () => {
           <h3 className="font-semibold text-gray-800 mb-2">Help</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:underline">Payment Options</a>
+              <Link href="/payment-options" >
+                <span className="hover:underline">Payment Options</span>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">Returns</a>
+              <Link href="/returns" >
+                <span className="hover:underline">Returns</span>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">Privacy Policies</a>
+              <Link href="/privacy-policy" >
+                <span className="hover:underline">Privacy Policies</span>
+              </Link>
             </li>
           </ul>
         </div>

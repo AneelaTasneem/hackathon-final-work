@@ -1,24 +1,21 @@
-import React from 'react'
-import HeroSection from './Components/Herosection'
-import Range from './Components/Range'
-import Ourproducts from './Components/Ourproducts'
-import Beautifulrooms from './Components/Beautifulrooms'
-import Furniture from './Components/Furniture'
 
+import React from "react";
+import HeroSection from "./Components/Herosection";
+import Range from "./Components/Range";
+import Ourproducts from "./Components/Ourproducts";
+import Beautifulrooms from "./Components/Beautifulrooms";
+import Furniture from "./Components/Furniture";
 
-
-
-const page = () => {
+const Page = () => {
   return (
-    <div >
+    <div>
       <HeroSection />
       <Range />
       <Ourproducts />
       <Beautifulrooms />
-      <Furniture />  
+      <Furniture />
     </div>
-  )
-}
-    
+  );
+};
 
-export default page
+export default Page;

@@ -1,117 +1,94 @@
-"use client";
-import React, { useState } from "react";
-import { FaUser, FaSearch, FaHeart } from "react-icons/fa";
-import Link from "next/link";
-import Image from "next/image";
-import Cartdrop from "./Cartdrop";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { FaUser, FaSearch, FaHeart, FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
+import Link from 'next/link';
+import Image from 'next/image';
+
+// Define CartItem type
+interface CartItem {
+  inventory: number;
+  // Add other properties of the cart item here if needed
+}
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState<number>(0);
+  const [wishlistCount, setWishlistCount] = useState<number>(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // Function to get items from localStorage
+  const getCartItems = (): CartItem[] => JSON.parse(localStorage.getItem('cart') || '[]');
+  const getWishlistItems = () => JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+  useEffect(() => {
+    const cartItems = getCartItems();
+    const totalItems = cartItems.reduce((total: number, item: CartItem) => total + item.inventory, 0);
+    setCartItemCount(totalItems);
+
+    const wishlistItems = getWishlistItems();
+    setWishlistCount(wishlistItems.length);
+  }, []);
 
   return (
-    <header className="bg-white shadow-sm py-4 relative">
+    <header className="bg-white shadow-sm py-4 sticky top-0 z-50">
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={32}
-            height={32}
-            className="h-8 w-8"
-          />
+          <Link href="/">
+            <Image src="/logo.png" alt="Logo" width={32} height={32} className="h-8 w-8 cursor-pointer" />
+          </Link>
           <span className="font-bold text-lg text-gray-800">Funiro</span>
         </div>
 
-        {/* Navigation Links */}
+        {/* Desktop Menu (Visible on md and larger screens) */}
         <nav className="hidden md:flex space-x-8">
-          <Link href="/" className="text-gray-600 hover:text-black">
-            Home
-          </Link>
-          <Link href="/Shop" className="text-gray-600 hover:text-black">
-            Shop
-          </Link>
-          <Link href="/Blog" className="text-gray-600 hover:text-black">
-            Blog
-          </Link>
-          <Link href="/Contact" className="text-gray-600 hover:text-black">
-            Contact
-          </Link>
+          <Link href="/" className="text-gray-600 hover:text-black">Home</Link>
+          <Link href="/Shop" className="text-gray-600 hover:text-black">Shop</Link>
+          <Link href="/blog" className="text-gray-600 hover:text-black">Blog</Link>
+          <Link href="/Contact" className="text-gray-600 hover:text-black">Contact</Link>
         </nav>
 
-        {/* Icons (Visible on All Screens) */}
-        <div className="flex items-center space-x-4">
-          <Link href="#" className="text-gray-600 hover:text-black">
-            <FaUser size={20} />
+        {/* Icons (Always visible, adjusted for mobile) */}
+        <div className="flex items-center space-x-3 md:space-x-4">
+          <Link href="#" className="text-gray-600 hover:text-black"><FaUser size={16} className="md:size-18" /></Link>
+          <Link href='/Search'><button className="text-gray-600 hover:text-black"><FaSearch size={16} className="md:size-18" /></button></Link>
+          <Link href="/Wishlist" className="relative text-gray-600 hover:text-black">
+            <FaHeart size={16} className="md:size-18" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {wishlistCount}
+              </span>
+            )}
           </Link>
-          <Link href="#" className="text-gray-600 hover:text-black">
-            <FaSearch size={20} />
+          <Link href="/Cart" className="relative text-gray-600 hover:text-black">
+            <FaShoppingCart size={16} className="md:size-18" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {cartItemCount}
+              </span>
+            )}
           </Link>
-          <Link href="#" className="text-gray-600 hover:text-black">
-            <FaHeart size={20} />
-          </Link>
-          {/* Import Cart Component */}
-          <Cartdrop />
-        </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMenu}
-          className="text-gray-600 hover:text-black md:hidden"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
+          {/* Dropdown Menu for Mobile */}
+          <div className="md:hidden relative">
+            <button 
+              className="text-gray-600 hover:text-black" 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              {isDropdownOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            </button>
 
-        {/* Dropdown Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg flex flex-col items-center py-4 space-y-4 z-50">
-            <Link
-              href="/"
-              className="text-gray-600 hover:text-black"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/Shop"
-              className="text-gray-600 hover:text-black"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Shop
-            </Link>
-            <Link
-              href="/Blog"
-              className="text-gray-600 hover:text-black"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <Link
-              href="/Contact"
-              className="text-gray-600 hover:text-black"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact
-            </Link>
+            {/* Dropdown Content */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
+                <Link href="/" className="block px-4 py-2 text-gray-600 hover:bg-gray-100" onClick={() => setIsDropdownOpen(false)}>Home</Link>
+                <Link href="/Shop" className="block px-4 py-2 text-gray-600 hover:bg-gray-100" onClick={() => setIsDropdownOpen(false)}>Shop</Link>
+                <Link href="/blog" className="block px-4 py-2 text-gray-600 hover:bg-gray-100" onClick={() => setIsDropdownOpen(false)}>Blog</Link>
+                <Link href="/Contact" className="block px-4 py-2 text-gray-600 hover:bg-gray-100" onClick={() => setIsDropdownOpen(false)}>Contact</Link>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </header>
   );

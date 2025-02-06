@@ -1,126 +1,122 @@
-// pages/our-products.tsx
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import { Product } from "../../../types/products";
+import { client } from "@/sanity/lib/client";
+import { eight } from "@/sanity/lib/queries";
 import Image from "next/image";
+import { urlFor } from "@/sanity/lib/image";
+import Link from "next/link";
+import {  FaHeart, FaShareAlt } from "react-icons/fa"; // Importing icons
+import Swal from "sweetalert2";
+import { addToCart } from "../actions/actions";
+import { addToWishlist } from "../actions/actions"; // Import wishlist functions
 
-const products = [
-  {
-    id: 1,
-    name: "Pingky",
-    description: "Cute bed set",
-    price: "Rp7,000,000",
-    oldPrice: "Rp14,000,000",
-    image: "/18.jpeg",
-    badge: { src: "/30.png", alt: "30% Off" },
-  },
-  {
-    id: 2,
-    name: "Leviosa",
-    description: "Stylish cafe chair",
-    price: "Rp2,500,000",
-    image: "/vip.png",
-    badge: { src: "/Button.png", alt: "Center Overlay" },
-  },
-  {
-    id: 3,
-    name: "Lolito",
-    description: "Luxury big sofa",
-    price: "Rp7,000,000",
-    oldPrice: "Rp14,000,000",
-    image: "/14.png",
-    badge: { src: "/50.png", alt: "50% Off" },
-  },
-  {
-    id: 4,
-    name: "Respira",
-    description: "Outdoor bar and table stool",
-    price: "Rp500,000",
-    image: "/15.jpeg",
-    badge: { src: "/New.png", alt: "New Arrival" },
-  },
-  {
-    id: 5,
-    name: "Grifo",
-    description: "Night lamp",
-    price: "Rp1,500,000",
-    image: "/16.png",
-  },
-  {
-    id: 6,
-    name: "Muggo",
-    description: "Small mug",
-    price: "Rp1,500,000",
-    image: "/17.png",
-    badge: { src: "/New.png", alt: "New Arrival" },
-  },
-  {
-    id: 7,
-    name: "Pingky",
-    description: "Cute bed set",
-    price: "Rp7,000,000",
-    oldPrice: "Rp14,000,000",
-    image: "/18.jpeg",
-    badge: { src: "/50.png", alt: "50% Off" },
-  },
-  {
-    id: 8,
-    name: "Leviosa",
-    description: "Stylish cafe chair",
-    price: "Rp2,500,000",
-    image: "/19.jpeg",
-    badge: { src: "/50.png", alt: "50% Sale" },
-  },
-];
+const ProductCards = () => {
+  const [products, setProducts] = useState<Product[]>([]);
 
-const OurProducts = () => {
+  useEffect(() => {
+    async function fetchProduct() {
+      const fetchedProducts: Product[] = await client.fetch(eight);
+      setProducts(fetchedProducts);
+    }
+    fetchProduct();
+  }, []);
+
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault();
+    Swal.fire({
+      position: "top-right",
+      icon: "success",
+      title: `${product.title} added to cart`,
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    addToCart(product);
+  };
+
+  const handleAddToWishlist = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault();
+    addToWishlist(product);
+    Swal.fire({
+      position: "top-right",
+      icon: "success",
+      title: `${product.title} added to wishlist`,
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  };
+
   return (
-    <div className="bg-gray-100 py-6 px-4 sm:px-6 md:px-8">
-    {/* Heading: Our Products */}
-    <h1 className="font-poppins mt-20 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#3A3A3A] text-center mb-8">
-      Our Products
-    </h1>
-    {/* Products Grid */}
-    <div className="w-full mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-      {products.map((product) => (
-        <div key={product.id} className="w-full h-auto relative">
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={300}
-            height={301}
-            className="w-full h-[150px] md:h-[301px] object-cover"
-          />
-          {product.badge && (
-            <Image
-              src={product.badge.src}
-              alt={product.badge.alt}
-              width={48}
-              height={48}
-              className="absolute top-2 right-2 w-12 h-12"
-            />
-          )}
-          <div className="w-full h-[99px] mt-[16px]">
-            <h1 className="font-poppins text-sm sm:text-lg md:text-2xl font-semibold text-[#3A3A3A]">
-              {product.name}
-            </h1>
-            <p className="font-poppins text-sm sm:text-xs md:text-base font-medium leading-6 text-left underline decoration-skip-ink">
-              {product.description}
-            </p>
-            <div className="font-poppins text-sm sm:text-base md:text-xl font-semibold text-[#3A3A3A]">
-              <span className="text-[#3A3A3A]">{product.price}</span>
-              {product.oldPrice && (
-                <span className="text-gray-400 text-sm md:text-lg line-through ml-2 block sm:inline">
-                  {product.oldPrice}
-                </span>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-8">
+        {products.map((product) => (
+          <Link href={`/product/${product.slug.current}`} key={product._id}>
+            <div className="relative group border border-gray-200 rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow">
+              {/* Product Image (Hover Effect) */}
+              {product.productImage && (
+                <div className="relative cursor-pointer">
+                  <Image
+                    src={urlFor(product.productImage.asset._ref).url() || ""}
+                    alt={product.title}
+                    className="rounded-md w-full h-64 object-cover"
+                    width={200}
+                    height={250}
+                  />
+                  {/* Transparent Overlay on Hover */}
+                  <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex flex-col items-center justify-center text-white">
+                    <button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      className="mb-2 bg-white text-[#b88e2f] text-sm font-medium px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          alert(`Shared "${product.title}"`);
+                        }}
+                        className="text-sm flex items-center"
+                      >
+                        <FaShareAlt className="mr-2" /> Share
+                      </button>
+                      <button
+                        onClick={(e) => handleAddToWishlist(e, product)}
+                        className="text-sm bg-white bg-opacity-20 px-3 py-2 rounded-md flex items-center"
+                      >
+                        <FaHeart className="mr-2" /> Wishlist
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Product Title */}
+              <h3 className="text-lg font-semibold text-gray-800 mt-4">{product.title}</h3>
+
+              {/* Price */}
+              <p className="text-xl font-bold text-gray-600 mt-2">${product.price}</p>
+
+              {/* Tags (Limit to 4 tags) */}
+              {product.tags && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {product.tags.slice(0, 4).map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-100 text-gray-600 text-sm font-medium px-2 py-1 rounded-full"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
-          </div>
-        </div>
-      ))}
+          </Link>
+        ))}
+      </div>
     </div>
-  </div>
-  
   );
 };
 
-
-export default OurProducts;
+export default ProductCards;
