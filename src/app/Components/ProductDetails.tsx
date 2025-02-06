@@ -7,20 +7,21 @@ import Iconsection from "./Iconssection";
 import { Product } from "../../../types/products";
 import { urlFor } from "@/sanity/lib/image";
 import Swal from "sweetalert2";
-import { addToCart, getCartItems, setCartItemCount } from "../actions/actions"; // Import relevant functions
+import { addToCart, getCartItems } from "../actions/actions"; // Import relevant functions
 
 interface ProductDetailsProps {
   product: Product; // Accept product data as a prop
 }
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
-  const [mainImage, setMainImage] = useState(product.productImage?.asset._ref);
+  const [mainImage] = useState(product.productImage?.asset._ref); // Removed unused setMainImage
   const [isExpanded, setIsExpanded] = useState(false); // For handling the Read More toggle
   const [cartItemCount, setCartItemCountState] = useState<number>(0); // State to hold the total cart item count
 
   // Effect to update cart item count when the component mounts
   useEffect(() => {
-    const totalItems = setCartItemCount(); // Call the function to calculate total items in cart
+    const cartItems = getCartItems(); // Get items from cart
+    const totalItems = cartItems.reduce((total: number, item: Product) => total + (item.inventory || 0), 0);
     setCartItemCountState(totalItems); // Update state with the count
   }, []); // Empty dependency array ensures this runs only on mount
 
@@ -40,9 +41,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
     });
 
     // Update cart item count in the Navbar (or state)
-    const cartItems = getCartItems(); // Get items from the cart
-    const totalItems = cartItems.reduce((total: number, item: any) => total + item.inventory, 0);
-    setCartItemCountState(totalItems); // Update the item count in state
+    const cartItems = getCartItems();
+    const totalItems = cartItems.reduce((total: number, item: Product) => total + (item.inventory || 0), 0);
+    setCartItemCountState(totalItems);
   };
 
   return (
@@ -152,7 +153,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
                 className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800"
                 onClick={handleAddToCart} // Trigger add to cart functionality
               >
-                Add To Cart
+                Add To Cart <span className="ml-2 text-gray-600">({cartItemCount} in cart)</span>
               </button>
               <button className="px-6 py-2 border rounded-md text-gray-700 hover:bg-gray-100">
                 Compare
