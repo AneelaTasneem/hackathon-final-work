@@ -2,10 +2,9 @@ import { client } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import ProductDetails from "@/app/Components/ProductDetails";
-import { Metadata } from "next";
 
-// ✅ Fetch product details from Sanity
-async function getProduct(slug: string): Promise<Product | null> {
+// Fetch product details from Sanity
+async function getProduct(slug: string): Promise<Product> {
   return client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0] {
       _id,
@@ -31,29 +30,22 @@ async function getProduct(slug: string): Promise<Product | null> {
 }
 
 // ✅ Generate static params for preloading valid slugs
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const products = await client.fetch(groq`*[_type == "product"]{ slug }`);
+export async function generateStaticParams() {
+  const products = await client.fetch(
+    groq`*[_type == "product"]{ slug }`
+  );
+
   return products.map((product: { slug: { current: string } }) => ({
     slug: product.slug.current,
   }));
 }
 
-// ✅ Product Page Component (Final Fix)
+// ✅ Product page component
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const product = await getProduct(params.slug);
+  // Await the params slug resolution
+  const { slug } =  params; 
 
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+  const product = await getProduct(slug);
 
   return <ProductDetails product={product} />;
-}
-
-// ✅ Optional: SEO Metadata
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const product = await getProduct(params.slug);
-  return {
-    title: product ? product.title : "Product Not Found",
-    description: product ? product.description : "This product does not exist.",
-  };
 }
