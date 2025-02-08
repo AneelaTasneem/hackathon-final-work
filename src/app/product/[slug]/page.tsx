@@ -4,12 +4,7 @@ import { Product } from "../../../../types/products";
 import ProductDetails from "@/app/Components/ProductDetails";
 import { Metadata } from "next";
 
-// ✅ Type definition for component props
-interface ProductPageProps {
-  params: { slug: string };
-}
-
-// ✅ Function to fetch product details by slug
+// ✅ Fetch product details from Sanity
 async function getProduct(slug: string): Promise<Product | null> {
   return client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0] {
