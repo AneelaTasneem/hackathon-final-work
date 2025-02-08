@@ -43,7 +43,7 @@ export async function generateStaticParams() {
 // ✅ Product page component
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   // Await the params slug resolution
-  const { slug } = await params;  // Await params before using its value
+  const { slug } =  params; 
 
   const product = await getProduct(slug);
 
