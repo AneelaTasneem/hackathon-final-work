@@ -3,9 +3,9 @@ import { groq } from "next-sanity";
 import { Product } from "../../../../types/products";
 import ProductDetails from "@/app/Components/ProductDetails";
 
-// Fetch product details from Sanity
+// ✅ Function to fetch product details by slug
 async function getProduct(slug: string): Promise<Product> {
-  return client.fetch(
+  return await client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0] {
       _id,
       title,
@@ -30,7 +30,7 @@ async function getProduct(slug: string): Promise<Product> {
 }
 
 // ✅ Generate static params for preloading valid slugs
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const products = await client.fetch(
     groq`*[_type == "product"]{ slug }`
   );
@@ -41,11 +41,12 @@ export async function generateStaticParams() {
 }
 
 // ✅ Product page component
-export default async function ProductPage({ params }: { params: { slug: string } }) {
-  // Await the params slug resolution
-  const { slug } =  params; 
+interface ProductPageProps {
+  params: { slug: string };
+}
 
-  const product = await getProduct(slug);
+export default async function ProductPage({ params }: ProductPageProps) {
+  const product = await getProduct(params.slug); // ✅ Correctly accessing slug
 
   return <ProductDetails product={product} />;
 }
