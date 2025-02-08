@@ -11,7 +11,7 @@ interface ProductPageProps {
 
 // ✅ Function to fetch product details by slug
 async function getProduct(slug: string): Promise<Product | null> {
-  return await client.fetch(
+  return client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0] {
       _id,
       title,
@@ -43,8 +43,8 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
   }));
 }
 
-// ✅ Product Page Component (Corrected)
-export default async function ProductPage({ params }: ProductPageProps) {
+// ✅ Product Page Component (Final Fix)
+export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product = await getProduct(params.slug);
 
   if (!product) {
@@ -54,8 +54,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return <ProductDetails product={product} />;
 }
 
-// ✅ Optional: SEO Metadata for better page optimization
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+// ✅ Optional: SEO Metadata
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const product = await getProduct(params.slug);
   return {
     title: product ? product.title : "Product Not Found",
